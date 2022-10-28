@@ -1,8 +1,9 @@
+#include "jsontotlvconverter.h"
+
 #include "rapidjson/document.h"
 #include "rapidjson/writer.h"
 #include <rapidjson/ostreamwrapper.h>
 #include <rapidjson/writer.h>
-
 #include "rapidjson/error/en.h"
 
 #include "../3rd_party/TLV/cpp/tlv_box.h"
@@ -74,53 +75,67 @@ int main(int argc, char *argv[])
         return 0;
     }
 
-    auto* inputSource = &std::cin;
-    std::ifstream inFile;
-
-    if(argc >= 2)
+    JsonToTlvConverter converter;
+    if(argc == 1)
     {
-        char* filePath = argv[1];
-        inFile.open(filePath);
-        inputSource = &inFile;
+        converter.setInputSource(std::cin);
+        converter.setOutputSource(std::cout);
+    }
+    else
+    {
+        converter.setInputSource(argv[1]);
+        converter.setOutputSource(argv[2]);
     }
 
-    GenericDocument<ASCII<>> inputRecord;
-    std::string line;
+    converter.convertAll();
 
-    std::map<std::string, int> keyDict;
-    auto findOrCreateKeyRecord = [&keyDict](const std::string& key) -> int
-    {
-        auto keyPosition = keyDict.find(key);
-        if(keyPosition == keyDict.end())
-        {
-            keyDict[key] = keyDict.size();
-            return keyDict.size() - 1;
-        }
-        return keyPosition->second;
-    };
+//    auto* inputSource = &std::cin;
+//    std::ifstream inFile;
 
-    // Write records:
-    int lineNumber = 0;
-    while (std::getline(*inputSource, line))
-    {
-        ParseResult ok = inputRecord.Parse(line.c_str());
-        if (!ok)
-        {
-            std::cout << "Not valid json: " << line << std::endl;
-            std::cerr << "line=" << lineNumber << ", column=" << ok.Offset() << " JSON parse error: " << GetParseError_En(ok.Code());
-            return 0;
-        }
+//    if(argc >= 2)
+//    {
+//        char* filePath = argv[1];
+//        inFile.open(filePath);
+//        inputSource = &inFile;
+//    }
 
-        for (auto iter = inputRecord.MemberBegin(); iter != inputRecord.MemberEnd(); ++iter)
-        {
-            const auto* keyValue = iter->name.GetString();
-            int keyIndex = findOrCreateKeyRecord(keyValue);
-            std::string keyCode = std::to_string(keyIndex);
-            iter->name.SetString(keyCode.c_str(), keyCode.size(), inputRecord.GetAllocator());
-        }
-        writeJsonToFile(inputRecord);
-        writeTlvToFile(inputRecord, argv[2]);
-        ++lineNumber;
-    }
+//    GenericDocument<ASCII<>> inputRecord;
+//    std::string line;
+
+//    std::map<std::string, int> keyDict;
+//    auto findOrCreateKeyRecord = [&keyDict](const std::string& key) -> int
+//    {
+//        auto keyPosition = keyDict.find(key);
+//        if(keyPosition == keyDict.end())
+//        {
+//            keyDict[key] = keyDict.size();
+//            return keyDict.size() - 1;
+//        }
+//        return keyPosition->second;
+//    };
+
+//    // Write records:
+//    int lineNumber = 0;
+//    while (std::getline(*inputSource, line))
+//    {
+//        ParseResult ok = inputRecord.Parse(line.c_str());
+//        if (!ok)
+//        {
+//            std::cout << "Not valid json: " << line << std::endl;
+//            std::cerr << "line=" << lineNumber << ", column=" << ok.Offset() << " JSON parse error: " << GetParseError_En(ok.Code());
+//            return 0;
+//        }
+
+//        for (auto iter = inputRecord.MemberBegin(); iter != inputRecord.MemberEnd(); ++iter)
+//        {
+//            const auto* keyValue = iter->name.GetString();
+//            int keyIndex = findOrCreateKeyRecord(keyValue);
+//            std::string keyCode = std::to_string(keyIndex);
+//            iter->name.SetString(keyCode.c_str(), keyCode.size(), inputRecord.GetAllocator());
+//        }
+//        writeJsonToFile(inputRecord);
+//        writeTlvToFile(inputRecord, argv[2]);
+//        ++lineNumber;
+//    }
     return 0;
 }
