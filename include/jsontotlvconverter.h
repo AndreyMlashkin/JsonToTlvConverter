@@ -15,11 +15,8 @@ class JsonToTlvConverter
 public:
     JsonToTlvConverter() = delete;
 
-    JsonToTlvConverter(const std::shared_ptr<JsonToTlvConverterInputStrategyInterface>& _interface);
+    JsonToTlvConverter(const std::shared_ptr<JsonToTlvConverterInputStrategyInterface>& _input);
     ~JsonToTlvConverter() = default;
-
-    void setInputSource(const std::string& _filename);
-    void setInputSource(std::istream& _iStream);
 
     void setOutputSource(const std::string& _filename, bool _truncate = true);
     void setOutputSource(std::ostream& _oStream);
@@ -30,12 +27,8 @@ public:
 private:
     int findOrCreateKeyRecord(const std::string& key);
 
-    std::shared_ptr<JsonToTlvConverterInputStrategyInterface> m_interface;
-
-    std::istream* m_inputSteam;
+    std::shared_ptr<JsonToTlvConverterInputStrategyInterface> m_input;
     std::ostream* m_outputSteam;
-
-    std::ifstream m_inFile;
     std::ofstream m_outFile;
 
     std::map<std::string, int> m_keyDict;

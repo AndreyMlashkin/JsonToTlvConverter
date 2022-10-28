@@ -23,12 +23,10 @@ int main(int argc, char *argv[])
     JsonToTlvConverter converter(converterInputStrategy);
     if(argc == 1)
     {
-        converter.setInputSource(std::cin);
         converter.setOutputSource(std::cout);
     }
     else
     {
-        converter.setInputSource(argv[1]);
         converter.setOutputSource(argv[2]);
     }
 
