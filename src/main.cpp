@@ -63,7 +63,7 @@ int main(int argc, char *argv[])
     {
         std::cout << "Programm takes 0 or 2 arguments on start:\n"
                      "If you specify no arguments, programm will read data from standard input and write to standard output stream.\n"
-                     "In other case, user shall specify input and output files";
+                     "In other case, user shall specify input and output files\n";
         return 0;
     }
 
