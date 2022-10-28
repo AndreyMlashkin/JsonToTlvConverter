@@ -31,8 +31,14 @@ void writeJsonToFile(const GenericDocument<ASCII<>>& record)
     record.Accept(writer);
 }
 
-void writeTlvToFile(const GenericDocument<ASCII<>>& record)
+bool writeTlvToFile(const GenericDocument<ASCII<>>& record, const std::string& filename)
 {
+    std::ofstream ofs(filename, std::ios::trunc | std::ios::binary);
+    if(!ofs.is_open())
+    {
+        std::cerr << "failed to open " << filename;
+        return false;
+    }
     tlv::TlvBox box;
     for (auto iter = record.MemberBegin(); iter != record.MemberEnd(); ++iter)
     {
@@ -47,19 +53,20 @@ void writeTlvToFile(const GenericDocument<ASCII<>>& record)
         if(iter->value.IsString())
             box.PutBoolValue(TlvTypesCode::STRING, iter->value.GetString());
     }
-
     if (!box.Serialize())
     {
         std::cout << "box Serialize Failed!\n";
-        return;
+        return false;
     }
-    std::cout << "box Serialize Success, " << box.GetSerializedBytes() << " bytes \n";
+
+    ofs.write(reinterpret_cast<const char*>(box.GetSerializedBuffer()), box.GetSerializedBytes());
+    return true;
 }
 
 int main(int argc, char *argv[])
 {
     if(argc == 2 && std::strcmp(argv[1], "help") == 0 ||
-       argc != 1 || argc != 3)
+       (argc != 1 && argc != 3))
     {
         std::cout << "Programm takes 0 or 2 arguments on start:\n"
                      "If you specify no arguments, programm will read data from standard input and write to standard output stream.\n"
@@ -112,7 +119,7 @@ int main(int argc, char *argv[])
             iter->name.SetString(keyCode.c_str(), keyCode.size(), inputRecord.GetAllocator());
         }
         writeJsonToFile(inputRecord);
-        writeTlvToFile(inputRecord);
+        writeTlvToFile(inputRecord, argv[2]);
         ++lineNumber;
     }
     return 0;
