@@ -1,3 +1,4 @@
+#include "jsontotlvconverterinputstrategy.h"
 #include "jsontotlvconverter.h"
 
 #include <iostream>
@@ -17,7 +18,11 @@ int main(int argc, char *argv[])
         return 0;
     }
 
-    JsonToTlvConverter converter;
+    JsonToTlvConverterInputStrategyFactory factory;
+    auto converterInputStrategy = factory.createStrategy(argc, argv);
+
+
+    JsonToTlvConverter converter(converterInputStrategy);
     if(argc == 1)
     {
         converter.setInputSource(std::cin);

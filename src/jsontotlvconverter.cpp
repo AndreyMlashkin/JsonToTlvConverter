@@ -136,6 +136,7 @@ bool JsonToTlvConverter::finalize()
         std::cout << "Dictionary serialization failed!\n";
         return false;
     }
+
     m_outputSteam->write(reinterpret_cast<const char*>(box.GetSerializedBuffer()), box.GetSerializedBytes());
     return true;
 }

@@ -1,4 +1,4 @@
-#include "../include/jsontotlvconverterinputstrategy.h"
+#include "jsontotlvconverterinputstrategy.h"
 #include <cassert>
 #include <iostream>
 
@@ -7,7 +7,7 @@ std::shared_ptr<JsonToTlvConverterInputStrategyInterface> JsonToTlvConverterInpu
     if(argc == 1)
         return std::make_shared<JsonToTlvConverterInputStrategyStdIo>();
     if(argc == 3)
-        return std::make_shared<JsonToTlvConverterInputStrategyFileIo>();
+        return std::make_shared<JsonToTlvConverterInputStrategyFileIo>(argc, argv);
     else
         assert(false);
 }
