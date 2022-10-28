@@ -58,6 +58,12 @@ bool writeTlvToFile(const rapidjson::GenericDocument<rapidjson::ASCII<>>& record
 
 }
 
+JsonToTlvConverter::JsonToTlvConverter(const std::shared_ptr<JsonToTlvConverterInputStrategyInterface> &_interface) :
+    m_interface(_interface)
+{
+
+}
+
 void JsonToTlvConverter::setInputSource(const std::string &_filename)
 {
     m_inFile.open(_filename);
@@ -99,6 +105,7 @@ bool JsonToTlvConverter::convertAll(bool _finalize)
     rapidjson::GenericDocument<rapidjson::ASCII<>> inputRecord;
     int lineNumber = 0;
     std::string line;
+    // TODO use input strategy here
     while (std::getline(*m_inputSteam, line))
     {
         rapidjson::ParseResult ok = inputRecord.Parse(line.c_str());

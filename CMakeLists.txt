@@ -7,13 +7,18 @@ find_package(RapidJSON CONFIG REQUIRED)
 add_executable(json_dictionary_parser
     3rd_party/TLV/cpp/tlv.h
     3rd_party/TLV/cpp/tlv_box.h
-    include/jsontotlvconverterinputstrategy.h
+    include/jsontotlvconverterinputstrategyinterface.h
+    include/jsontotlvconverterinputstrategystdio.h
+    include/jsontotlvconverterinputstrategyfileio.h
+    include/jsontotlvconverterinputstrategyfactory.h
     include/jsontotlvconverter.h
 
     3rd_party/TLV/cpp/tlv.cpp
     3rd_party/TLV/cpp/tlv_box.cpp
+    src/jsontotlvconverterinputstrategystdio.cpp
+    src/jsontotlvconverterinputstrategyfileio.cpp
+    src/jsontotlvconverterinputstrategyfactory.cpp
     src/jsontotlvconverter.cpp
-    src/jsontotlvconverterinputstrategy.cpp
     src/main.cpp
 )
 target_link_libraries(${PROJECT_NAME} PRIVATE RapidJSON::RapidJSON)

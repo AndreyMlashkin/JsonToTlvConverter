@@ -1,11 +1,9 @@
-#include "jsontotlvconverterinputstrategy.h"
+#include "jsontotlvconverterinputstrategyfactory.h"
 #include "jsontotlvconverter.h"
 
 #include <iostream>
 #include <stdio.h>
 #include <string.h>
-
-
 
 int main(int argc, char *argv[])
 {
