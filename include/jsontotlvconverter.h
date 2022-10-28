@@ -21,7 +21,7 @@ public:
     void setOutputSource(std::ostream& _oStream);
 
     bool convertAll(bool _finalize = false);
-    void finalize();
+    bool finalize();
 
 private:
     int findOrCreateKeyRecord(const std::string& key);
@@ -33,8 +33,6 @@ private:
     std::ofstream m_outFile;
 
     std::map<std::string, int> m_keyDict;
-
-
 };
 
 #endif // JSONTOTLVCONVERTER_H

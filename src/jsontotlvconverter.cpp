@@ -123,10 +123,23 @@ bool JsonToTlvConverter::convertAll(bool _finalize)
     return true;
 }
 
-void JsonToTlvConverter::finalize()
+bool JsonToTlvConverter::finalize()
 {
-  // TODO
+    tlv::TlvBox box;
+    for (auto&& [key, value] : m_keyDict)
+    {
+        box.PutStringValue(TlvTypesCode::STRING, key);
+        box.PutIntValue(TlvTypesCode::INT, value);
+    }
+    if (!box.Serialize())
+    {
+        std::cout << "Dictionary serialization failed!\n";
+        return false;
+    }
+    m_outputSteam->write(reinterpret_cast<const char*>(box.GetSerializedBuffer()), box.GetSerializedBytes());
+    return true;
 }
+
 
 int JsonToTlvConverter::findOrCreateKeyRecord(const std::string &key)
 {
