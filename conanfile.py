@@ -11,7 +11,7 @@ class JsonDictionaryParserConan(ConanFile):
     url = "<Package recipe repository url here, for issues about the package>"
     description = "<Description of JsonDictionaryParser here>"
     topics = ("json", "parsing")
-    generators = "cmake_find_package_multi"
+    generators = "cmake_find_package_multi", "cmake"
     cmake = None
 
     # Binary configuration

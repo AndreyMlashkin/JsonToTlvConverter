@@ -7,6 +7,7 @@
 
 #include "../3rd_party/TLV/cpp/tlv_box.h"
 
+#include <string.h>
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -57,6 +58,15 @@ void writeTlvToFile(const GenericDocument<ASCII<>>& record)
 
 int main(int argc, char *argv[])
 {
+    if(argc == 2 && std::strcmp(argv[1], "help") == 0 ||
+       argc != 1 || argc != 3)
+    {
+        std::cout << "Programm takes 0 or 2 arguments on start:\n"
+                     "If you specify no arguments, programm will read data from standard input and write to standard output stream.\n"
+                     "In other case, user shall specify input and output files";
+        return 0;
+    }
+
     auto* inputSource = &std::cin;
     std::ifstream inFile;
 
