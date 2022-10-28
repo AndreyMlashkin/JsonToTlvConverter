@@ -18,7 +18,7 @@ class JsonDictionaryParserConan(ConanFile):
     settings = "os", "compiler", "build_type", "arch"
 
     # Sources are located in the same place as this recipe, copy them to the recipe
-    exports_sources = "CMakeLists.txt", "src/*", "include/*"
+    exports_sources = "CMakeLists.txt", "src/*", "include/*", "3rd_party/*"
 
     def requirements(self):
         self.requires('rapidjson/cci.20220822')
