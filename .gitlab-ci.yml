@@ -1,0 +1,10 @@
+stages:
+  - build
+
+build-job-linux:
+  image: conanio/gcc11
+  stage: build
+  script:
+    - conan create . --build missing
+  tags:
+    - linux
