@@ -4,6 +4,8 @@ stages:
 build-job-linux:
   image: conanio/gcc11
   stage: build
+  variables:
+    GIT_SUBMODULE_STRATEGY: "normal"
   script:
     - conan create . --build missing
   tags:
