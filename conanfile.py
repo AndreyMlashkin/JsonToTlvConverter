@@ -1,5 +1,8 @@
 from conan import ConanFile
 from conans import CMake
+from conan.tools.scm import Git
+
+required_conan_version = ">=1.53.0"
 
 class JsonDictionaryParserConan(ConanFile):
     name = "json_dictionary_parser"
@@ -19,6 +22,10 @@ class JsonDictionaryParserConan(ConanFile):
 
     # Sources are located in the same place as this recipe, copy them to the recipe
     exports_sources = "CMakeLists.txt", "src/*", "include/*", "3rd_party/*"
+
+    def set_version(self):
+        git = Git(self, folder=self.recipe_folder)
+        self.version = git.run("describe --always --tags --abbrev=9")
 
     def requirements(self):
         self.requires('rapidjson/cci.20220822')
