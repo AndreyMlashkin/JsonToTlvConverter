@@ -16,8 +16,8 @@ public:
                        const std::shared_ptr<JsonToTlvConverterOutputStrategyInterface>& _output);
     ~JsonToTlvConverter() = default;
 
-    bool convertAll(bool _finalize = false);
-    bool finalize();
+    bool convertAll(bool _finalize = true);
+    bool writeDictionary();
 
 private:
     int findOrCreateKeyRecord(const std::string& key);

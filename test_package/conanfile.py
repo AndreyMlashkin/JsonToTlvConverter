@@ -19,5 +19,10 @@ class JsonDictionaryParserTestConan(ConanFile):
         basic_layout(self)
 
     def test(self):
-        if not cross_building(self):
-            self.run("json_dictionary_parser help", env="conanrun")
+        if cross_building(self):
+            return
+
+        self.run("json_dictionary_parser help", env="conanrun")
+        self.run("json_dictionary_parser ../test1_empty_input.json test1.output", env="conanrun")
+        self.run("json_dictionary_parser ../test2_task_input.json  test2.output", env="conanrun")
+        self.run("json_dictionary_parser ../test3_one_record.json  test3.output", env="conanrun")

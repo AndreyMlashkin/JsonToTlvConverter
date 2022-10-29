@@ -18,7 +18,7 @@ void JsonToTlvConverterInputStrategyFileIo::setInputSource(const std::string &_f
     m_inFile.open(_filename);
     if(!m_inFile.is_open())
     {
-        std::cerr << "Can't open file " << _filename;
+        std::cerr << "Can't open file " << _filename << std::endl;
     }
 }
 

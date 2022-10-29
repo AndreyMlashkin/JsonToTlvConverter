@@ -12,14 +12,14 @@
 #include <iostream>
 
 
-enum TlvTypesCode
+enum TlvTypesCode : unsigned char
 {
-    RECORDS_SEPARATOR = 1,
-    DICTIONARY_START  = 2,
+    BOOL   = 1,
+    INT    = 2,
+    STRING = 3,
 
-    BOOL   = 3,
-    INT    = 4,
-    STRING = 5
+    RECORDS_SEPARATOR = 0xFE,
+    DICTIONARY_START  = 0XFF,
 };
 
 namespace
@@ -38,12 +38,18 @@ bool writeTlvToFile(const rapidjson::GenericDocument<rapidjson::ASCII<>>& record
             box.PutBoolValue(TlvTypesCode::BOOL, iter->value.GetBool());
         else if(iter->value.IsInt())
             box.PutIntValue(TlvTypesCode::INT, iter->value.GetInt());
-        if(iter->value.IsString())
+        else if(iter->value.IsString())
             box.PutStringValue(TlvTypesCode::STRING, iter->value.GetString());
+        else
+        {
+            std::cerr << "can't handle rapid json Type " << iter->value.GetType();
+            return false;
+        }
     }
+    box.PutNoValue(RECORDS_SEPARATOR);
     if (!box.Serialize())
     {
-        std::cout << "box Serialize Failed!\n";
+        std::cerr << "box Serialize Failed!\n";
         return false;
     }
 
@@ -86,12 +92,17 @@ bool JsonToTlvConverter::convertAll(bool _finalize)
         ::writeTlvToFile(inputRecord, m_output);
         ++lineNumber;
     }
+    if(_finalize)
+        writeDictionary();
+
     return true;
 }
 
-bool JsonToTlvConverter::finalize()
+bool JsonToTlvConverter::writeDictionary()
 {
     tlv::TlvBox box;
+    box.PutNoValue(DICTIONARY_START);
+
     for (auto&& [key, value] : m_keyDict)
     {
         box.PutStringValue(TlvTypesCode::STRING, key);
