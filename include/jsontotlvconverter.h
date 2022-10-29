@@ -22,9 +22,6 @@ public:
                        const std::shared_ptr<JsonToTlvConverterOutputStrategyInterface>& _output);
     ~JsonToTlvConverter() = default;
 
-    void setOutputSource(const std::string& _filename, bool _truncate = true);
-    void setOutputSource(std::ostream& _oStream);
-
     bool convertAll(bool _finalize = false);
     bool finalize();
 
@@ -33,8 +30,6 @@ private:
 
     std::shared_ptr<JsonToTlvConverterInputStrategyInterface> m_input;
     std::shared_ptr<JsonToTlvConverterOutputStrategyInterface> m_output;
-    std::ostream* m_outputSteam;
-    std::ofstream m_outFile;
 
     std::map<std::string, int> m_keyDict;
 };

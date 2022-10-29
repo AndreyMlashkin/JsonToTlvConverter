@@ -7,7 +7,7 @@ class JsonToTlvConverterOutputStrategyStdIo : public JsonToTlvConverterOutputStr
 {
 public:
     JsonToTlvConverterOutputStrategyStdIo() = default;
-    virtual bool getline(std::string& line) override;
+    virtual bool write(const char* _data, size_t _length) override;
 };
 
 #endif // JSONTOTLVCONVERTEROUTPUTSTRATEGYSTDIO_H

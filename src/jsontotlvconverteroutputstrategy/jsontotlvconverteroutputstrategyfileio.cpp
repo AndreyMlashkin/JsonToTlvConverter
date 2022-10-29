@@ -2,22 +2,27 @@
 #include <jsontotlvconverteroutputstrategy/jsontotlvconverteroutputstrategyfileio.h>
 
 
-JsonToTlvConverterOutputStrategyFileIo::JsonToTlvConverterOutputStrategyFileIo(int argc, char *argv[])
+JsonToTlvConverterOutputStrategyFileIo::JsonToTlvConverterOutputStrategyFileIo(int argc, char *argv[], bool _truncate)
 {
-    setOutputSource(argv[1]);
+    setOutputSource(argv[2], _truncate);
 }
 
-bool JsonToTlvConverterOutputStrategyFileIo::getline(std::string &line)
+bool JsonToTlvConverterOutputStrategyFileIo::write(const char *_data, size_t _length)
 {
-    return std::getline(m_inFile, line).eof();
+    m_outFile.write(_data, _length);
+    return !m_outFile.bad();
 }
 
-void JsonToTlvConverterOutputStrategyFileIo::setOutputSource(const std::string &_filename)
+void JsonToTlvConverterOutputStrategyFileIo::setOutputSource(const std::string &_filename, bool _truncate)
 {
-    m_inFile.open(_filename);
-    if(!m_inFile.is_open())
+    auto mode = std::ios::binary;
+    if(_truncate)
+        mode = mode | std::ios::trunc;
+
+    m_outFile.open(_filename, mode);
+    if(!m_outFile.is_open())
     {
-        std::cerr << "Can't open file " << _filename;
+        std::cerr << "failed to open " << _filename;
     }
 }
 

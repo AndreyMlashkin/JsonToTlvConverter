@@ -9,7 +9,8 @@ JsonToTlvConverterInputStrategyFileIo::JsonToTlvConverterInputStrategyFileIo(int
 
 bool JsonToTlvConverterInputStrategyFileIo::getline(std::string &line)
 {
-    return std::getline(m_inFile, line).eof();
+    std::getline(m_inFile, line);
+    return m_inFile.eof();
 }
 
 void JsonToTlvConverterInputStrategyFileIo::setInputSource(const std::string &_filename)

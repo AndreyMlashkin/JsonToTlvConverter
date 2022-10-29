@@ -32,7 +32,7 @@ void writeJsonToFile(const rapidjson::GenericDocument<rapidjson::ASCII<>>& recor
     record.Accept(writer);
 }
 
-bool writeTlvToFile(const rapidjson::GenericDocument<rapidjson::ASCII<>>& record, std::ostream* out)
+bool writeTlvToFile(const rapidjson::GenericDocument<rapidjson::ASCII<>>& record, std::shared_ptr<JsonToTlvConverterOutputStrategyInterface> out)
 {
     tlv::TlvBox box;
     for (auto iter = record.MemberBegin(); iter != record.MemberEnd(); ++iter)
@@ -68,32 +68,11 @@ JsonToTlvConverter::JsonToTlvConverter(const std::shared_ptr<JsonToTlvConverterI
 
 }
 
-void JsonToTlvConverter::setOutputSource(const std::string &_filename, bool _truncate)
-{
-    auto mode = std::ios::binary;
-    if(_truncate)
-        mode = mode | std::ios::trunc;
-
-    m_outFile.open(_filename, mode);
-    if(!m_outFile.is_open())
-    {
-        std::cerr << "failed to open " << _filename;
-        throw std::invalid_argument("can't open file");
-    }
-    setOutputSource(m_outFile);
-}
-
-void JsonToTlvConverter::setOutputSource(std::ostream &_oStream)
-{
-    m_outputSteam = &_oStream;
-}
-
 bool JsonToTlvConverter::convertAll(bool _finalize)
 {
     rapidjson::GenericDocument<rapidjson::ASCII<>> inputRecord;
     int lineNumber = 0;
     std::string line;
-    // TODO use input strategy here
     while (m_input->getline(line))
     {
         rapidjson::ParseResult ok = inputRecord.Parse(line.c_str());
@@ -112,7 +91,7 @@ bool JsonToTlvConverter::convertAll(bool _finalize)
             iter->name.SetString(keyCode.c_str(), keyCode.size(), inputRecord.GetAllocator());
         }
         writeJsonToFile(inputRecord);
-        ::writeTlvToFile(inputRecord, m_outputSteam);
+        ::writeTlvToFile(inputRecord, m_output);
         ++lineNumber;
     }
     return true;
@@ -132,7 +111,7 @@ bool JsonToTlvConverter::finalize()
         return false;
     }
 
-    m_outputSteam->write(reinterpret_cast<const char*>(box.GetSerializedBuffer()), box.GetSerializedBytes());
+    m_output->write(reinterpret_cast<const char*>(box.GetSerializedBuffer()), box.GetSerializedBytes());
     return true;
 }
 

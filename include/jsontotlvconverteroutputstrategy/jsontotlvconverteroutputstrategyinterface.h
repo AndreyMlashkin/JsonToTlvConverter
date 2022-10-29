@@ -9,7 +9,7 @@
 class JsonToTlvConverterOutputStrategyInterface
 {
 public:
-    virtual bool getline(std::string& line) = 0;
+    virtual bool write(const char* _data, size_t _length) = 0;
 };
 
 

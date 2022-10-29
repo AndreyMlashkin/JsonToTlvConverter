@@ -10,13 +10,13 @@
 class JsonToTlvConverterOutputStrategyFileIo : public JsonToTlvConverterOutputStrategyInterface
 {
 public:
-    JsonToTlvConverterOutputStrategyFileIo(int argc, char *argv[]);
-    bool getline(std::string& line);
+    JsonToTlvConverterOutputStrategyFileIo(int argc, char *argv[], bool _truncate = true);
+    virtual bool write(const char* _data, size_t _length) override;
 
 private:
-    void setOutputSource(const std::string &_filename);
+    void setOutputSource(const std::string &_filename, bool _truncate);
 
-    std::ifstream m_inFile;
+    std::ofstream m_outFile;
 };
 
 #endif // JSONTOTLVCONVERTEROUTPUTSTRATEGYFILEIO_H

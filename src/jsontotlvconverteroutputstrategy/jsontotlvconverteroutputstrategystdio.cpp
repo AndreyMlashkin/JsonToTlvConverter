@@ -1,7 +1,8 @@
 #include <iostream>
 #include <jsontotlvconverteroutputstrategy/jsontotlvconverteroutputstrategystdio.h>
 
-bool JsonToTlvConverterOutputStrategyStdIo::getline(std::string &line)
+bool JsonToTlvConverterOutputStrategyStdIo::write(const char* _data, size_t _length)
 {
-    return std::getline(std::cin, line).eof();
+    std::cout.write(_data, _length);
+    return !std::cout.bad();
 }

@@ -20,16 +20,7 @@ int main(int argc, char *argv[])
     auto converterInputStrategy  = JsonToTlvConverterInputStrategyFactory::createStrategy(argc, argv);
     auto converterOutputStrategy = JsonToTlvConverterOutputStrategyFactory::createStrategy(argc, argv);
 
-
     JsonToTlvConverter converter(converterInputStrategy, converterOutputStrategy);
-//    if(argc == 1)
-//    {
-//        converter.setOutputSource(std::cout);
-//    }
-//    else
-//    {
-//        converter.setOutputSource(argv[2]);
-//    }
 
     converter.convertAll();
     return 0;
