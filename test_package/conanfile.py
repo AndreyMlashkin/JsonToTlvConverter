@@ -2,7 +2,6 @@ import os
 from conan import ConanFile
 from conan.tools.build import cross_building
 from conan.tools.layout import basic_layout
-import numpy as np
 import filecmp
 
 class JsonDictionaryParserTestConan(ConanFile):
