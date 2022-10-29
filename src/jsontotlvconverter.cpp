@@ -118,7 +118,6 @@ bool JsonToTlvConverter::writeDictionary()
     return true;
 }
 
-
 int JsonToTlvConverter::findOrCreateKeyRecord(const std::string &key)
 {
     auto keyPosition = m_keyDict.find(key);
