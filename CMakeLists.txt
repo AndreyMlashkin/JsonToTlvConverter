@@ -7,17 +7,17 @@ find_package(RapidJSON CONFIG REQUIRED)
 add_executable(json_dictionary_parser
     3rd_party/TLV/cpp/tlv.h
     3rd_party/TLV/cpp/tlv_box.h
-    include/jsontotlvconverterinputstrategyinterface.h
-    include/jsontotlvconverterinputstrategystdio.h
-    include/jsontotlvconverterinputstrategyfileio.h
-    include/jsontotlvconverterinputstrategyfactory.h
+    include/jsontotlvconverterinputstrategy/jsontotlvconverterinputstrategyinterface.h
+    include/jsontotlvconverterinputstrategy/jsontotlvconverterinputstrategystdio.h
+    include/jsontotlvconverterinputstrategy/jsontotlvconverterinputstrategyfileio.h
+    include/jsontotlvconverterinputstrategy/jsontotlvconverterinputstrategyfactory.h
     include/jsontotlvconverter.h
 
     3rd_party/TLV/cpp/tlv.cpp
     3rd_party/TLV/cpp/tlv_box.cpp
-    src/jsontotlvconverterinputstrategystdio.cpp
-    src/jsontotlvconverterinputstrategyfileio.cpp
-    src/jsontotlvconverterinputstrategyfactory.cpp
+    src/jsontotlvconverterinputstrategy/jsontotlvconverterinputstrategystdio.cpp
+    src/jsontotlvconverterinputstrategy/jsontotlvconverterinputstrategyfileio.cpp
+    src/jsontotlvconverterinputstrategy/jsontotlvconverterinputstrategyfactory.cpp
     src/jsontotlvconverter.cpp
     src/main.cpp
 )

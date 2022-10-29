@@ -2,7 +2,7 @@
 #define JSONTOTLVCONVERTERINPUTSTRATEGYFACTORY_H
 
 #include <memory>
-#include <jsontotlvconverterinputstrategyinterface.h>
+#include <jsontotlvconverterinputstrategy/jsontotlvconverterinputstrategyinterface.h>
 
 class JsonToTlvConverterInputStrategyFactory
 {

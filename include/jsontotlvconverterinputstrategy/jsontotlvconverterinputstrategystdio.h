@@ -1,7 +1,7 @@
 #ifndef JSONTOTLVCONVERTERINPUTSTRATEGYSTDIO_H
 #define JSONTOTLVCONVERTERINPUTSTRATEGYSTDIO_H
 
-#include <jsontotlvconverterinputstrategyinterface.h>
+#include <jsontotlvconverterinputstrategy/jsontotlvconverterinputstrategyinterface.h>
 
 class JsonToTlvConverterInputStrategyStdIo : public JsonToTlvConverterInputStrategyInterface
 {

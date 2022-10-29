@@ -1,8 +1,8 @@
 #include <cassert>
 
-#include "jsontotlvconverterinputstrategyfactory.h"
-#include "jsontotlvconverterinputstrategystdio.h"
-#include "jsontotlvconverterinputstrategyfileio.h"
+#include <jsontotlvconverterinputstrategy/jsontotlvconverterinputstrategyfactory.h>
+#include <jsontotlvconverterinputstrategy/jsontotlvconverterinputstrategystdio.h>
+#include <jsontotlvconverterinputstrategy/jsontotlvconverterinputstrategyfileio.h>
 
 std::shared_ptr<JsonToTlvConverterInputStrategyInterface> JsonToTlvConverterInputStrategyFactory::createStrategy(int argc, char *argv[])
 {

@@ -1,5 +1,5 @@
 #include <iostream>
-#include "../include/jsontotlvconverterinputstrategystdio.h"
+#include <jsontotlvconverterinputstrategy/jsontotlvconverterinputstrategystdio.h>
 
 bool JsonToTlvConverterInputStrategyStdIo::getline(std::string &line)
 {

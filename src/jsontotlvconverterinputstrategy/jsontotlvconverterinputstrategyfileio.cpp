@@ -1,5 +1,5 @@
 #include <iostream>
-#include <jsontotlvconverterinputstrategyfileio.h>
+#include <jsontotlvconverterinputstrategy/jsontotlvconverterinputstrategyfileio.h>
 
 
 JsonToTlvConverterInputStrategyFileIo::JsonToTlvConverterInputStrategyFileIo(int argc, char *argv[])

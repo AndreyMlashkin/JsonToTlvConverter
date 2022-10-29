@@ -1,4 +1,4 @@
-#include "jsontotlvconverterinputstrategyfactory.h"
+#include <jsontotlvconverterinputstrategy/jsontotlvconverterinputstrategyfactory.h>
 #include "jsontotlvconverter.h"
 
 #include <iostream>

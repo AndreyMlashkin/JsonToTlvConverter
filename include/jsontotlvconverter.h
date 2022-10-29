@@ -1,7 +1,7 @@
 #ifndef JSONTOTLVCONVERTER_H
 #define JSONTOTLVCONVERTER_H
 
-#include "jsontotlvconverterinputstrategyinterface.h"
+#include <jsontotlvconverterinputstrategy/jsontotlvconverterinputstrategyinterface.h>
 #include <ios>
 #include <istream>
 #include <ostream>
