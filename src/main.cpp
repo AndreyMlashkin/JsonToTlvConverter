@@ -21,7 +21,6 @@ int main(int argc, char *argv[])
     auto converterOutputStrategy = JsonToTlvConverterOutputStrategyFactory::createStrategy(argc, argv);
 
     JsonToTlvConverter converter(converterInputStrategy, converterOutputStrategy);
-
     converter.convertAll();
     return 0;
 }

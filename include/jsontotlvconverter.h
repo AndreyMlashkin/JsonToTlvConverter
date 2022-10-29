@@ -1,14 +1,8 @@
 #ifndef JSONTOTLVCONVERTER_H
 #define JSONTOTLVCONVERTER_H
 
-#include <ios>
-#include <istream>
-#include <memory>
-#include <ostream>
-#include <fstream>
-#include <sstream>
 #include <map>
-#include <memory.h>
+#include <memory>
 
 class JsonToTlvConverterInputStrategyInterface;
 class JsonToTlvConverterOutputStrategyInterface;

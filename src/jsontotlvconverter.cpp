@@ -3,7 +3,6 @@
 #include "jsontotlvconverteroutputstrategy/jsontotlvconverteroutputstrategyinterface.h"
 #include "jsontotlvconverterinputstrategy/jsontotlvconverterinputstrategyinterface.h"
 #include "rapidjson/document.h"
-#include "rapidjson/writer.h"
 #include <rapidjson/ostreamwrapper.h>
 #include <rapidjson/writer.h>
 #include "rapidjson/error/en.h"
@@ -15,22 +14,16 @@
 
 enum TlvTypesCode
 {
-    BOOL,
-    INT,
-    STRING
+    RECORDS_SEPARATOR = 1,
+    DICTIONARY_START  = 2,
+
+    BOOL   = 3,
+    INT    = 4,
+    STRING = 5
 };
 
 namespace
 {
-
-void writeJsonToFile(const rapidjson::GenericDocument<rapidjson::ASCII<>>& record)
-{
-    std::ofstream ofs("output.json", std::ios::app);
-    rapidjson::OStreamWrapper osw(ofs);
-
-    rapidjson::Writer<rapidjson::OStreamWrapper> writer(osw);
-    record.Accept(writer);
-}
 
 bool writeTlvToFile(const rapidjson::GenericDocument<rapidjson::ASCII<>>& record, std::shared_ptr<JsonToTlvConverterOutputStrategyInterface> out)
 {
@@ -39,14 +32,14 @@ bool writeTlvToFile(const rapidjson::GenericDocument<rapidjson::ASCII<>>& record
     {
         const auto* key = iter->name.GetString();
         int keyNum = std::stoi(key);
-        box.PutBoolValue(TlvTypesCode::INT, keyNum);
+        box.PutIntValue(TlvTypesCode::INT, keyNum);
 
         if(iter->value.IsBool())
             box.PutBoolValue(TlvTypesCode::BOOL, iter->value.GetBool());
         else if(iter->value.IsInt())
-            box.PutBoolValue(TlvTypesCode::INT, iter->value.GetInt());
+            box.PutIntValue(TlvTypesCode::INT, iter->value.GetInt());
         if(iter->value.IsString())
-            box.PutBoolValue(TlvTypesCode::STRING, iter->value.GetString());
+            box.PutStringValue(TlvTypesCode::STRING, iter->value.GetString());
     }
     if (!box.Serialize())
     {
@@ -90,7 +83,6 @@ bool JsonToTlvConverter::convertAll(bool _finalize)
             std::string keyCode = std::to_string(keyIndex);
             iter->name.SetString(keyCode.c_str(), keyCode.size(), inputRecord.GetAllocator());
         }
-        writeJsonToFile(inputRecord);
         ::writeTlvToFile(inputRecord, m_output);
         ++lineNumber;
     }
