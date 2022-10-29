@@ -1,12 +1,22 @@
 stages:
   - build
 
-build-job-linux:
+build-job-linux-gcc-x64:
   image: conanio/gcc11
   stage: build
   variables:
     GIT_SUBMODULE_STRATEGY: "normal"
   script:
     - conan create . --build missing
+  tags:
+    - linux
+
+build-job-linux-clang-x32:
+  image: conanio/clang10
+  stage: build
+  variables:
+    GIT_SUBMODULE_STRATEGY: "normal"
+  script:
+    - conan create . --build missing -s arch=x86 -s arch_build=x86
   tags:
     - linux
