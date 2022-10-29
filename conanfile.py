@@ -2,7 +2,7 @@ from conan import ConanFile
 from conans import CMake
 from conan.tools.scm import Git
 
-required_conan_version = ">=1.53.0"
+required_conan_version = ">=1.52.0"
 
 class JsonDictionaryParserConan(ConanFile):
     name = "json_dictionary_parser"
