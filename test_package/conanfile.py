@@ -39,3 +39,5 @@ class JsonDictionaryParserTestConan(ConanFile):
         self._run_test_case("test1_empty_input")
         self._run_test_case("test2_task_input")
         self._run_test_case("test3_one_record")
+        self._run_test_case("test4_maxint")
+        self._run_test_case("test5_long_record")
