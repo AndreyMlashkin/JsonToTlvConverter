@@ -1,4 +1,5 @@
 #include <jsontotlvconverterinputstrategy/jsontotlvconverterinputstrategyfactory.h>
+#include <jsontotlvconverteroutputstrategy/jsontotlvconverteroutputstrategyfactory.h>
 #include "jsontotlvconverter.h"
 
 #include <iostream>
@@ -16,19 +17,19 @@ int main(int argc, char *argv[])
         return 0;
     }
 
-    JsonToTlvConverterInputStrategyFactory factory;
-    auto converterInputStrategy = factory.createStrategy(argc, argv);
+    auto converterInputStrategy  = JsonToTlvConverterInputStrategyFactory::createStrategy(argc, argv);
+    auto converterOutputStrategy = JsonToTlvConverterOutputStrategyFactory::createStrategy(argc, argv);
 
 
-    JsonToTlvConverter converter(converterInputStrategy);
-    if(argc == 1)
-    {
-        converter.setOutputSource(std::cout);
-    }
-    else
-    {
-        converter.setOutputSource(argv[2]);
-    }
+    JsonToTlvConverter converter(converterInputStrategy, converterOutputStrategy);
+//    if(argc == 1)
+//    {
+//        converter.setOutputSource(std::cout);
+//    }
+//    else
+//    {
+//        converter.setOutputSource(argv[2]);
+//    }
 
     converter.convertAll();
     return 0;

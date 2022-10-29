@@ -1,21 +1,25 @@
 #ifndef JSONTOTLVCONVERTER_H
 #define JSONTOTLVCONVERTER_H
 
-#include <jsontotlvconverterinputstrategy/jsontotlvconverterinputstrategyinterface.h>
 #include <ios>
 #include <istream>
+#include <memory>
 #include <ostream>
 #include <fstream>
 #include <sstream>
 #include <map>
 #include <memory.h>
 
+class JsonToTlvConverterInputStrategyInterface;
+class JsonToTlvConverterOutputStrategyInterface;
+
 class JsonToTlvConverter
 {
 public:
     JsonToTlvConverter() = delete;
 
-    JsonToTlvConverter(const std::shared_ptr<JsonToTlvConverterInputStrategyInterface>& _input);
+    JsonToTlvConverter(const std::shared_ptr<JsonToTlvConverterInputStrategyInterface>& _input,
+                       const std::shared_ptr<JsonToTlvConverterOutputStrategyInterface>& _output);
     ~JsonToTlvConverter() = default;
 
     void setOutputSource(const std::string& _filename, bool _truncate = true);
@@ -28,6 +32,7 @@ private:
     int findOrCreateKeyRecord(const std::string& key);
 
     std::shared_ptr<JsonToTlvConverterInputStrategyInterface> m_input;
+    std::shared_ptr<JsonToTlvConverterOutputStrategyInterface> m_output;
     std::ostream* m_outputSteam;
     std::ofstream m_outFile;
 

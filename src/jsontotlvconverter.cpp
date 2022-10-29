@@ -1,5 +1,7 @@
 #include "../include/jsontotlvconverter.h"
 
+#include "jsontotlvconverteroutputstrategy/jsontotlvconverteroutputstrategyinterface.h"
+#include "jsontotlvconverterinputstrategy/jsontotlvconverterinputstrategyinterface.h"
 #include "rapidjson/document.h"
 #include "rapidjson/writer.h"
 #include <rapidjson/ostreamwrapper.h>
@@ -58,8 +60,10 @@ bool writeTlvToFile(const rapidjson::GenericDocument<rapidjson::ASCII<>>& record
 
 }
 
-JsonToTlvConverter::JsonToTlvConverter(const std::shared_ptr<JsonToTlvConverterInputStrategyInterface> &_input) :
-    m_input(_input)
+JsonToTlvConverter::JsonToTlvConverter(const std::shared_ptr<JsonToTlvConverterInputStrategyInterface> &_input,
+                                       const std::shared_ptr<JsonToTlvConverterOutputStrategyInterface> &_output) :
+    m_input(_input),
+    m_output(_output)
 {
 
 }
