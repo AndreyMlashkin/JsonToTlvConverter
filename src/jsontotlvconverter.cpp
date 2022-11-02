@@ -22,38 +22,28 @@ enum TlvTypesCode : unsigned char
     DICTIONARY_START  = 0XFF,
 };
 
+typedef rapidjson::GenericDocument<rapidjson::ASCII<>> InputRecord;
+typedef typeof(InputRecord::ValueType) JsonValue;
+
 namespace
 {
 
-bool writeTlvToFile(const rapidjson::GenericDocument<rapidjson::ASCII<>>& record, std::shared_ptr<JsonToTlvConverterOutputStrategyInterface> out)
+bool writeSimpleJsonValueToTlvFile(const JsonValue& value, tlv::TlvBox& box)
 {
-    tlv::TlvBox box;
-    for (auto iter = record.MemberBegin(); iter != record.MemberEnd(); ++iter)
-    {
-        const auto* key = iter->name.GetString();
-        int keyNum = std::stoi(key);
-        box.PutIntValue(TlvTypesCode::INT, keyNum);
+    assert(value.IsArray() == false);
+    assert(value.IsObject() == false);
 
-        if(iter->value.IsBool())
-            box.PutBoolValue(TlvTypesCode::BOOL, iter->value.GetBool());
-        else if(iter->value.IsInt())
-            box.PutIntValue(TlvTypesCode::INT, iter->value.GetInt());
-        else if(iter->value.IsString())
-            box.PutStringValue(TlvTypesCode::STRING, iter->value.GetString());
-        else
-        {
-            std::cerr << "can't handle rapid json Type " << iter->value.GetType();
-            return false;
-        }
-    }
-    box.PutNoValue(RECORDS_SEPARATOR);
-    if (!box.Serialize())
+    if(value.IsBool())
+        box.PutBoolValue(TlvTypesCode::BOOL, value.GetBool());
+    else if(value.IsInt())
+        box.PutIntValue(TlvTypesCode::INT, value.GetInt());
+    else if(value.IsString())
+        box.PutStringValue(TlvTypesCode::STRING, value.GetString());
+    else
     {
-        std::cerr << "box Serialize Failed!\n";
+        std::cerr << "can't handle rapid json Type " << value.GetType();
         return false;
     }
-
-    out->write(reinterpret_cast<const char*>(box.GetSerializedBuffer()), box.GetSerializedBytes());
     return true;
 }
 
@@ -69,11 +59,12 @@ JsonToTlvConverter::JsonToTlvConverter(const std::shared_ptr<JsonToTlvConverterI
 
 bool JsonToTlvConverter::convertAll(bool _finalize)
 {
-    rapidjson::GenericDocument<rapidjson::ASCII<>> inputRecord;
     int lineNumber = 0;
     std::string line;
     while (m_input->getline(line))
     {
+        InputRecord inputRecord;
+
         rapidjson::ParseResult ok = inputRecord.Parse(line.c_str());
         if (!ok)
         {
@@ -82,14 +73,30 @@ bool JsonToTlvConverter::convertAll(bool _finalize)
             return false;
         }
 
+        tlv::TlvBox box;
         for (auto iter = inputRecord.MemberBegin(); iter != inputRecord.MemberEnd(); ++iter)
         {
             const auto* keyValue = iter->name.GetString();
             int keyIndex = findOrCreateKeyRecord(keyValue);
-            std::string keyCode = std::to_string(keyIndex);
-            iter->name.SetString(keyCode.c_str(), keyCode.size(), inputRecord.GetAllocator());
+            bool success = box.PutIntValue(TlvTypesCode::INT, keyIndex);
+            if(!success)
+                std::cerr << "Failed to servialize key for line=" << lineNumber;
+            success = writeSimpleJsonValueToTlvFile(iter->value, box);
+            if(!success)
+                std::cerr << "Failed to serialize value for line=" << lineNumber << " key=" << iter->name.GetString();
         }
-        ::writeTlvToFile(inputRecord, m_output);
+
+        box.PutNoValue(RECORDS_SEPARATOR);
+        if (!box.Serialize())
+        {
+            std::cerr << "box Serialize Failed!\n";
+            return false;
+        }
+
+        bool success = m_output->write(reinterpret_cast<const char*>(box.GetSerializedBuffer()), box.GetSerializedBytes());
+        if(!success)
+            std::cerr << "Failed to write line " << lineNumber << " on the disk";
+
         ++lineNumber;
     }
     if(_finalize)
@@ -105,8 +112,13 @@ bool JsonToTlvConverter::writeDictionary()
 
     for (auto&& [key, value] : m_keyDict)
     {
-        box.PutStringValue(TlvTypesCode::STRING, key);
-        box.PutIntValue(TlvTypesCode::INT, value);
+        bool success = box.PutStringValue(TlvTypesCode::STRING, key);
+        if(!success)
+            std::cerr << "Failed to write key, while writing a dictionary";
+
+        success = box.PutIntValue(TlvTypesCode::INT, value);
+        if(!success)
+            std::cerr << "Failed to value, while writing a dictionary";
     }
     if (!box.Serialize())
     {
