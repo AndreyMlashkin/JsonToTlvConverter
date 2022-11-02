@@ -6,11 +6,13 @@ in order to get this project running, you will need git, working c++ compiler, c
 
 In order to run the project and tests, you may need these commands (it should work on any system, including windows):
 
+```
 git clone https://gitlab.com/malashkin.andrey/json_tlv_converter_nxlog.git
 git submodule update --init
 pip install conan -y
 cd json_tlv_converter_nxlog
 conan create . --build missing
+```
 
 ## Project dependencies
 Project uses Nativejson for parsing because it has the best performance comparing to other libs:
