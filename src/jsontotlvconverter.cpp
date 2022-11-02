@@ -30,8 +30,8 @@ namespace
 
 bool writeSimpleJsonValueToTlvFile(const JsonValue& value, tlv::TlvBox& box)
 {
-    assert(value.IsArray() == false);
-    assert(value.IsObject() == false);
+    if(value.IsArray() || value.IsObject())
+        throw std::runtime_error("got array or an object in input, aborting");
 
     if(value.IsBool())
         box.PutBoolValue(TlvTypesCode::BOOL, value.GetBool());

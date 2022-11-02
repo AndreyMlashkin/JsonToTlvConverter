@@ -17,10 +17,23 @@ int main(int argc, char *argv[])
         return 0;
     }
 
+    try {
+
     auto converterInputStrategy  = JsonToTlvConverterInputStrategyFactory::createStrategy(argc, argv);
     auto converterOutputStrategy = JsonToTlvConverterOutputStrategyFactory::createStrategy(argc, argv);
 
     JsonToTlvConverter converter(converterInputStrategy, converterOutputStrategy);
     converter.convertAll();
+
+    }
+    catch (const std::exception& ex)
+    {
+        std::cerr << "convesion failed with an exception: " << ex.what();
+    }
+    catch (...)
+    {
+        std::cerr << "unknown exception";
+    }
+
     return 0;
 }
