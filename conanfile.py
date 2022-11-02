@@ -21,7 +21,7 @@ class JsonDictionaryParserConan(ConanFile):
     settings = "os", "compiler", "build_type", "arch"
 
     # Sources are located in the same place as this recipe, copy them to the recipe
-    exports_sources = "CMakeLists.txt", "src/*", "include/*", "3rd_party/*"
+    exports_sources = "CMakeLists.txt", "src/*", "include/*", "3rd_party/TLV/cpp/tlv.h", "3rd_party/TLV/cpp/tlv_box.h", "3rd_party/TLV/cpp/tlv.cpp", "3rd_party/TLV/cpp/tlv_box.cpp"
 
     def requirements(self):
         self.requires('rapidjson/cci.20220822')
