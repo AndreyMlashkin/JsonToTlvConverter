@@ -1,8 +1,7 @@
-import os
+import os, sys, filecmp
 from conan import ConanFile
 from conan.tools.build import cross_building
 from conan.tools.layout import basic_layout
-import filecmp
 
 class JsonDictionaryParserTestConan(ConanFile):
     settings = "os", "compiler", "build_type", "arch"
@@ -19,15 +18,32 @@ class JsonDictionaryParserTestConan(ConanFile):
         basic_layout(self)
         
     def _run_test_case(self, test_name):
-        input = "../{}.tlv".format(test_name)
+        input = "../{}.json".format(test_name)
         output = "{}.tlv".format(test_name)
-        
+        expected_output = "../{}.tlv".format(test_name)
+
+        assert os.path.isfile(input)
+        assert os.path.isfile(expected_output)
+
         self.run("json_dictionary_parser {} {}".format(input, output), env="conanrun")
-        same = filecmp.cmp(input, output, shallow=False)
-        if same:
-            print("Files are different, test {} failed".format(test_name), file=sys.stderr)
-        else:
+        assert os.path.isfile(output)
+
+        print("\n\n\n\nExpected output:\n")
+        expected_output_file = open(expected_output, 'rb')
+        assert expected_output_file.closed == False
+        print(expected_output_file.read())
+
+        print("\n\n\n\nOutput:\n")
+        output_file = open(output, 'rb')
+        assert output_file.closed == False
+        print(output_file.read())
+
+        equal = filecmp.cmp(output, expected_output, shallow=False)
+        if equal:
             print("Test {} succeeded".format(test_name))
+        else:
+            print("Files are different, test {} failed".format(test_name), file=sys.stderr)
+            assert False
 
     def test(self):
         if cross_building(self):
