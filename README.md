@@ -1,4 +1,4 @@
-# json_tlv_converter_nxlog
+# JSON to TLV converter
 This application should take a simplified JSON file as input and output the information to a TLV format.
 
 ## Getting started
